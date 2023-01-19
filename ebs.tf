@@ -51,4 +51,12 @@ resource "aws_volume_attachment" "ebs_attachment" {
     ]
   }
 }
-
+output "IP" {
+  depends_on = [
+    aws_volume_attachment.ebs_attachment,
+    aws_ebs_volume.webserver_ebs,
+    aws_instance.webserver,
+    aws_cloudfront_distribution.s3_distribution
+  ]
+  value = aws_instance.webserver.public_ip
+}

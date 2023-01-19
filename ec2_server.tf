@@ -9,6 +9,9 @@ resource "aws_instance" "webserver" {
   tags = {
     Name = "webserver_instance"
   }
+  root_block_device {
+    delete_on_termination = false
+  }
   connection {
     type        = "ssh"
     user        = "ec2-user"
