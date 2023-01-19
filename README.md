@@ -42,7 +42,7 @@ aws_secret_key = "[YOUR AWS SECRET KEY]"
 
 ## More Explanations
 
-First of all, I have created an isolated approach. I have seem many mamouth Terraform files but I find they are unmaintainable and hard to navigate. Keeping all the code in seperate files I can manage them as individual silo's. 
+First of all, I have created an isolated approach. I have seem many mammoth Terraform files but I find they are unmaintainable and hard to navigate. Keeping all the code in separate files I can manage them as individual silo's. By having, clear separation and well named files in the structure, I believe this project is much simpler to handover and view for the first time.
 
 ### Variables
 
@@ -64,14 +64,24 @@ As you can see I have configured the security groups to allow inbound traffic fo
 
 Defined in: cloudfront.tf
 
-This is honestly my first time utilising CloudFront. It has been great to learn more about the technology.
+This is honestly my first time utilising CloudFront. It has been great to learn more about the technology. I have utilised cloudfront to be a gateway to my s3 bucket. This allows me to create requests based on the domain name over http/https to access files. I have limited the allowed methods to the lowest access allowed `["HEAD", "GET"]`. This is a key part of an application as it allows the images to be served from the S3 bucket to the web application. This allows for further isolation of parts for the webserver and the images while keeping the application alive. 
 
 ### S3 Bucket
 
 Defined in: s3_bucket.tf
 
+Adding an S3 bucket allows me to store my media off of the webserver and away from the code itself. This allows for the code that is deployed to be light weight and not associated with the media directly. Furthermore it is an expandable resource which means as the web application expands, so can the S3 bucket. This keeps our solution isolated and scalable. 
+
 ### EC2 Webserver
 
 Defined in: ec2_server.tf
 
-This is the main device and the glue that brings the project together. This is where the webserver is hosted. I have disabled ebs delete on termination to ensure that if we decide to upgrade our EC2 instance to a larger space, this can be done with both the image server and the server code persisting beyond the device state change. This keeps our infastructure extensible and cyloed so if one item went down, the others still exist. While the website would not be accessible without an ec2 server. If the server hits a broken state we can re-run `terraform apply` to reinstate the upto date server.
+This is the main device and the glue that brings the project together. This is where the webserver is hosted. I have disabled ebs delete on termination to ensure that if we decide to upgrade our EC2 instance to a larger space, this can be done with both the image server and the server code persisting beyond the device state change. This keeps our infrastructure extensible and siloed so if one item went down, the others still exist. While the website would not be accessible without an ec2 server. If the server hits a broken state we can re-run `terraform apply` to reinstate the up to date server.
+
+### Application
+
+This application is ultra simple. It is a http server that runs an ultra simple HTML webpage. The webpage loads an image stored in our S3 bucket by talking to the CloudFront api. As this is a basic hello world web application, I have not currently written a method for deploying new code over existing infrastructure. However, my eventual implementation would involve CI/CD having access to the infrastructure to directly deploy the new data over the top.
+
+## Additional Security Options
+
+Utilizing VPC's can allow us to further limit access to the endpoint. I can subsequently set up one device in a public vpc which has the sole purpose of ssh tunnel device. We can then setup a sub VPC containing our HTTP Server. The ingress rules on the HTTP server can be set to only allow SSH from the proxy device IP. That way to access the hardware on the end machine, it would require VPN access and removes the exposure of the public IP of our HTTP server exposing SSH attempts. It also helps to prevent DDoS attacks.
