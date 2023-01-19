@@ -1,6 +1,3 @@
-# EBS
-# We want to store code in persistent storage so that instance termination could not affect it.
-
 resource "aws_ebs_volume" "webserver_ebs" {
   availability_zone = aws_instance.webserver.availability_zone
   size              = 1
@@ -8,10 +5,6 @@ resource "aws_ebs_volume" "webserver_ebs" {
     Name = "webserver-persistent-store"
   }
 }
-
-# Attach to ec2 instance
-
-# Because until they are not created we can not attach them. while destroying if the volume is attached to the instance we can not destroy it 
 
 resource "aws_volume_attachment" "ebs_attachment" {
   device_name  = "/dev/xvdf"
@@ -51,6 +44,7 @@ resource "aws_volume_attachment" "ebs_attachment" {
     ]
   }
 }
+
 output "IP" {
   depends_on = [
     aws_volume_attachment.ebs_attachment,

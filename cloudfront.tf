@@ -1,5 +1,3 @@
-# We created CloudFront distribution for our s3 bucket that we have created early. To know more about attributes please go through this: resource aws_cloudfront_distribution.
-
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.webserver_images_bucket.bucket_regional_domain_name

@@ -1,7 +1,3 @@
-# S3
-
-# We used terraform’s resource ‘aws_s3_bucket’ to create a bucket. To create a s3 bucket you must give a unique name to the bucket. ‘Here’s bucket name is ‘website-images-res’.
-
 resource "aws_s3_bucket" "webserver_images_bucket" {
   bucket = "webserver-images-quant-spark-int"
   tags = {

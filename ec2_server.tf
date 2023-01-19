@@ -1,6 +1,3 @@
-# EC2 instance
-
-# (Provisioners are used to execute scripts on a local or remote machine as part of resource creation or destruction).
 resource "aws_instance" "webserver" {
   ami             = "ami-0fe0b2cf0e1f25c8a"
   instance_type   = "t2.micro"
