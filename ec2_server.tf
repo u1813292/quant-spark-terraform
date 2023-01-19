@@ -16,11 +16,6 @@ resource "aws_instance" "webserver" {
     port        = 22
     private_key = tls_private_key.webserver_private_key.private_key_pem
   }
-  provisioner "file" {
-    # HTTP File
-    source      = "test.html"
-    destination = "/home/ec2-user/test.html"
-  }
   provisioner "remote-exec" {
     inline = [
       "sudo yum install httpd php -y",

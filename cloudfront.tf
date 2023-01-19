@@ -16,8 +16,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled = true
   comment         = "Additional Information."
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods  = ["HEAD", "GET"]
+    cached_methods   = ["HEAD", "GET"]
     target_origin_id = aws_s3_bucket.webserver_images_bucket.id
     forwarded_values {
       query_string = false
